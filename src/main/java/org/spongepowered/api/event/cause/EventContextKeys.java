@@ -22,44 +22,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.event.cause.entity.teleport;
-
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.living.monster.Enderman;
-import org.spongepowered.api.util.ResettableBuilder;
+package org.spongepowered.api.event.cause;
 
 /**
- * Represents a cause for a
- * {@link org.spongepowered.api.event.entity.MoveEntityEvent.Teleport} such
- * that there is an associated {@link TeleportType} and possibly, an object
- * associated with the type.
- *
- * Examples may include an {@link EntityTeleportCause} with an {@link Enderman}
- * teleporting away from rain, or a {@link Entity} entering a nether portal.
+ * Standard keys for use within {@link EventContext}s.
  */
-public interface TeleportCause {
+public final class EventContextKeys {
 
-    static Builder builder() {
-        return Sponge.getRegistry().createBuilder(Builder.class);
+    public static final String CREATOR = "Creator";
+    public static final String DAMAGE_TYPE = "DamageType";
+    public static final String IGNITER = "Igniter";
+    public static final String NOTIFIER = "Notifier";
+    public static final String OWNER = "Owner";
+    public static final String PLAYER_SIMULATED = "PlayerSimulated";
+    public static final String PROJECTILE_SOURCE = "ProjectileSource";
+    public static final String SERVICE_MANAGER = "ServiceManager";
+    public static final String SPAWN_TYPE = "SpawnType";
+    public static final String TELEPORT_TYPE = "TeleportType";
+    public static final String THROWER = "Thrower";
+    public static final String WEAPON = "Weapon";
+
+    private EventContextKeys() {
     }
 
-    /**
-     * Gets the type of the teleport.
-     *
-     * @return The type of teleport
-     */
-    TeleportType getTeleportType();
-
-    interface TeleporterCauseBuilder<T extends TeleportCause, B extends TeleporterCauseBuilder<T, B>> extends ResettableBuilder<T, B> {
-
-        B type(TeleportType type);
-
-        T build();
-
-    }
-
-    interface Builder extends TeleporterCauseBuilder<TeleportCause, Builder> {
-
-    }
 }

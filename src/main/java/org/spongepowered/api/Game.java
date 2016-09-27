@@ -32,6 +32,7 @@ import org.spongepowered.api.data.DataSerializable;
 import org.spongepowered.api.data.persistence.DataBuilder;
 import org.spongepowered.api.data.property.PropertyRegistry;
 import org.spongepowered.api.data.property.PropertyStore;
+import org.spongepowered.api.event.CauseStackManager;
 import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.network.ChannelRegistrar;
 import org.spongepowered.api.plugin.PluginManager;
@@ -201,5 +202,13 @@ public interface Game {
      * @return The channel registrar
      */
     ChannelRegistrar getChannelRegistrar();
+
+    /**
+     * Gets the {@link CauseStackManager} for handling the current event cause
+     * stack and context information.
+     * 
+     * @return The cause stack manager
+     */
+    CauseStackManager getCauseStackManager();
 
 }

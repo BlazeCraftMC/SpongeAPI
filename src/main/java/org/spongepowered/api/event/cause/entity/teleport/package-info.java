@@ -22,23 +22,4 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.event.cause.entity.teleport.common;
-
-import org.spongepowered.api.event.cause.entity.teleport.PortalTeleportCause;
-import org.spongepowered.api.world.PortalAgent;
-
-public abstract class AbstractPortalTeleportCause extends AbstractTeleportCause implements PortalTeleportCause {
-
-    protected final PortalAgent agent;
-
-    protected AbstractPortalTeleportCause(AbstractPortalTeleportCauseBuilder<?, ?> builder) {
-        super(builder);
-        this.agent = builder.agent;
-    }
-
-    @Override
-    public PortalAgent getTeleporter() {
-        return this.agent;
-    }
-
-}
+@org.spongepowered.api.util.annotation.NonnullByDefault package org.spongepowered.api.event.cause.entity.teleport;

@@ -24,7 +24,7 @@
  */
 package org.spongepowered.api.service.permission.option;
 
-import org.spongepowered.api.service.context.Context;
+import org.spongepowered.api.service.context.ServiceContext;
 import org.spongepowered.api.service.permission.SubjectData;
 
 import java.util.Map;
@@ -32,13 +32,14 @@ import java.util.Set;
 
 public interface OptionSubjectData extends SubjectData {
 
+    // TODO why are these overriden?
     /**
      * Return all options for all context combinations currently registered.
      *
      * @return An immutable snapshot of all options data
      */
     @Override
-    Map<Set<Context>, Map<String, String>> getAllOptions();
+    Map<Set<ServiceContext>, Map<String, String>> getAllOptions();
 
     /**
      * Gets options for a specific context combination.
@@ -47,7 +48,7 @@ public interface OptionSubjectData extends SubjectData {
      * @return All available options, returning an empty map if none are present
      */
     @Override
-    Map<String, String> getOptions(Set<Context> contexts);
+    Map<String, String> getOptions(Set<ServiceContext> contexts);
 
     /**
      * Sets a specific option to a value.
@@ -58,7 +59,7 @@ public interface OptionSubjectData extends SubjectData {
      * @return Whether the operation was successful
      */
     @Override
-    boolean setOption(Set<Context> contexts, String key, String value);
+    boolean setOption(Set<ServiceContext> contexts, String key, String value);
 
     /**
      * Clear all options in the given context combination.
@@ -67,7 +68,7 @@ public interface OptionSubjectData extends SubjectData {
      * @return Whether the operation was successful (any options were removed)
      */
     @Override
-    boolean clearOptions(Set<Context> contexts);
+    boolean clearOptions(Set<ServiceContext> contexts);
 
     /**
      * Clear all options.

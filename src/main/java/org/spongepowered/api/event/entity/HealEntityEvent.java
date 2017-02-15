@@ -26,6 +26,7 @@ package org.spongepowered.api.event.entity;
 
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Cancellable;
+import org.spongepowered.api.event.cause.entity.health.HealthFunction;
 import org.spongepowered.api.event.cause.entity.health.HealthModifier;
 import org.spongepowered.api.event.cause.entity.health.source.HealingSource;
 import org.spongepowered.api.event.impl.AbstractHealEntityEvent;
@@ -102,7 +103,7 @@ public interface HealEntityEvent extends TargetEntityEvent, Cancellable {
      *
      * @return The list of heal amount modifier functions
      */
-    List<Tuple<HealthModifier, Function<? super Double, Double>>> getOriginalFunctions();
+    List<HealthFunction> getOriginalFunctions();
 
     /**
      * Gets the "base" healing amount to apply to the targeted {@link Entity}.
@@ -170,6 +171,6 @@ public interface HealEntityEvent extends TargetEntityEvent, Cancellable {
      * @return A list of heal amount modifiers to functions
      */
     @PropertySettings(requiredParameter = false, generateMethods = false)
-    List<Tuple<HealthModifier, Function<? super Double, Double>>> getModifiers();
+    List<HealthFunction> getModifiers();
 
 }

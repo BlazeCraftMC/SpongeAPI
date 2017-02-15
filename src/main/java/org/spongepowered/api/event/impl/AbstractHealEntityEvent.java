@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.spongepowered.api.event.cause.entity.damage.DamageModifier;
+import org.spongepowered.api.event.cause.entity.health.HealthFunction;
 import org.spongepowered.api.event.cause.entity.health.HealthModifier;
 import org.spongepowered.api.event.entity.HealEntityEvent;
 import org.spongepowered.api.eventgencore.annotation.UseField;
@@ -38,12 +39,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public abstract class AbstractHealEntityEvent extends AbstractModifierEvent<HealthModifier> implements HealEntityEvent {
+public abstract class AbstractHealEntityEvent extends AbstractModifierEvent<HealthFunction, HealthModifier> implements HealEntityEvent {
 
-    @UseField
-    protected double originalHealAmount;
-    @UseField protected List<Tuple<HealthModifier, Function<? super Double, Double>>> originalFunctions;
-
+    @UseField protected double originalHealAmount;
+    @UseField protected List<HealthFunction> originalFunctions;
     @UseField protected double baseHealAmount;
 
     @Override
@@ -92,7 +91,7 @@ public abstract class AbstractHealEntityEvent extends AbstractModifierEvent<Heal
         checkNotNull(function, "Function was null!");
         int indexToAddTo = 0;
         boolean addAtEnd = true;
-        for (Iterator<Tuple<HealthModifier, Function<? super Double, Double>>> iterator = this.modifierFunctions.iterator(); iterator.hasNext(); ) {
+        for (Iterator<HealthFunction> iterator = this.modifierFunctions.iterator(); iterator.hasNext(); ) {
             Tuple<HealthModifier, Function<? super Double, Double>> tuple = iterator.next();
             if (tuple.getFirst().equals(healthModifier)) {
                 iterator.remove();
@@ -102,9 +101,9 @@ public abstract class AbstractHealEntityEvent extends AbstractModifierEvent<Heal
             indexToAddTo++;
         }
         if (addAtEnd) {
-            this.modifierFunctions.add(new Tuple<>(healthModifier, function));
+            this.modifierFunctions.add(new HealthFunction(healthModifier, function));
         } else {
-            this.modifierFunctions.add(indexToAddTo, new Tuple<>(healthModifier, function));
+            this.modifierFunctions.add(indexToAddTo, new HealthFunction(healthModifier, function));
         }
         this.recalculateDamages(this.baseHealAmount);
     }
@@ -120,4 +119,8 @@ public abstract class AbstractHealEntityEvent extends AbstractModifierEvent<Heal
         this.recalculateDamages(this.baseHealAmount);
     }
 
+    @Override
+    protected HealthFunction convertTuple(HealthModifier obj, Function<? super Double, Double> function) {
+        return new HealthFunction(obj, function);
+    }
 }

@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.EventContext;
+import org.spongepowered.api.event.cause.entity.damage.DamageFunction;
 import org.spongepowered.api.event.cause.entity.damage.DamageModifier;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.util.Tuple;
@@ -93,8 +94,8 @@ public class SpongeAbstractDamageEntityEventTest {
         DamageModifier firstModifer = mockParam(DamageModifier.class);
         DamageModifier secondModifier = mockParam(DamageModifier.class);
 
-        List<Tuple<DamageModifier, Function<? super Double, Double>>>
-                originalFunctions = Lists.newArrayList(Tuple.of(firstModifer, p -> p * 2), Tuple.of(secondModifier, p -> p * 5));
+        List<DamageFunction>
+                originalFunctions = Lists.newArrayList(DamageFunction.of(firstModifer, p -> p * 2), DamageFunction.of(secondModifier, p -> p * 5));
 
         DamageEntityEvent event = SpongeEventFactory.createDamageEntityEvent(Cause.of(EventContext.empty(), "none"), originalFunctions, targetEntity, originalDamage);
 
@@ -135,8 +136,8 @@ public class SpongeAbstractDamageEntityEventTest {
         DamageModifier firstModifer = mockParam(DamageModifier.class);
         DamageModifier secondModifier = mockParam(DamageModifier.class);
 
-        List<Tuple<DamageModifier, Function<? super Double, Double>>>
-                originalFunctions = Lists.newArrayList(Tuple.of(firstModifer, p -> p * 2), Tuple.of(secondModifier, p -> p * 5));
+        List<DamageFunction>
+                originalFunctions = Lists.newArrayList(DamageFunction.of(firstModifer, p -> p * 2), DamageFunction.of(secondModifier, p -> p * 5));
 
         DamageEntityEvent event = SpongeEventFactory.createDamageEntityEvent(Cause.of(EventContext.empty(), "none"), originalFunctions, targetEntity, originalDamage);
 
@@ -158,7 +159,7 @@ public class SpongeAbstractDamageEntityEventTest {
 
         assertThat(event.getOriginalFunctions(), is(Matchers.equalTo(originalFunctions)));
 
-        assertThat(event.getModifiers(), is(Matchers.equalTo(Lists.newArrayList(Tuple.of(firstModifer, newFunction), originalFunctions.get(1)))));
+        assertThat(event.getModifiers(), is(Matchers.equalTo(Lists.newArrayList(DamageFunction.of(firstModifer, newFunction), originalFunctions.get(1)))));
     }
 
     @SuppressWarnings("unchecked")
@@ -182,11 +183,11 @@ public class SpongeAbstractDamageEntityEventTest {
 
         Function<Double, Double> thirdFunction = p -> p;
 
-        List<Tuple<DamageModifier, Function<? super Double, Double>>>
-                originalFunctions = Lists.newArrayList(Tuple.of(firstModifer, p -> p * 2), Tuple.of(secondModifier, p -> p * 5));
+        List<DamageFunction>
+                originalFunctions = Lists.newArrayList(DamageFunction.of(firstModifer, p -> p * 2), DamageFunction.of(secondModifier, p -> p * 5));
 
-        List<Tuple<DamageModifier, Function<? super Double, Double>>> newFunctions = Lists.newArrayList(originalFunctions);
-        newFunctions.add(Tuple.of(thirdModifier, thirdFunction));
+        List<DamageFunction> newFunctions = Lists.newArrayList(originalFunctions);
+        newFunctions.add(DamageFunction.of(thirdModifier, thirdFunction));
 
         DamageEntityEvent event = SpongeEventFactory.createDamageEntityEvent(Cause.of(EventContext.empty(), "none"), originalFunctions, targetEntity, originalDamage);
 
@@ -220,8 +221,8 @@ public class SpongeAbstractDamageEntityEventTest {
         DamageModifier firstModifer = mockParam(DamageModifier.class);
         DamageModifier secondModifier = mockParam(DamageModifier.class);
 
-        List<Tuple<DamageModifier, Function<? super Double, Double>>>
-                originalFunctions = Lists.newArrayList(Tuple.of(firstModifer, p -> p), Tuple.of(secondModifier, p -> p));
+        List<DamageFunction>
+                originalFunctions = Lists.newArrayList(DamageFunction.of(firstModifer, p -> p), DamageFunction.of(secondModifier, p -> p));
 
         DamageEntityEvent event = SpongeEventFactory.createDamageEntityEvent(Cause.of(EventContext.empty(), "none"), originalFunctions, targetEntity, 0);
 

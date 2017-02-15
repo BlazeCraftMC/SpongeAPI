@@ -44,27 +44,27 @@ import java.util.function.Function;
  * An abstract base class for implementations of {@link DamageEntityEvent} and {@link HealEntityEvent}
  * @param <T> The modifier type to use
  */
-public abstract class AbstractModifierEvent<T> extends AbstractEvent {
+public abstract class AbstractModifierEvent<T extends Tuple<M, Function<? super Double, Double>>, M> extends AbstractEvent {
 
     protected double originalFinalAmount;
-    protected List<Tuple<T, Double>> originalModifiers;
-    protected Map<T, Double> originalModifierMap;
-    @UseField protected final LinkedHashMap<T, Double> modifiers = Maps.newLinkedHashMap();
-    protected final List<Tuple<T, Function<? super Double, Double>>> modifierFunctions = new ArrayList<>();
+    protected List<Tuple<M, Double>> originalModifiers;
+    protected Map<M, Double> originalModifierMap;
+    @UseField protected final LinkedHashMap<M, Double> modifiers = Maps.newLinkedHashMap();
+    protected final List<T> modifierFunctions = new ArrayList<>();
 
-    protected ImmutableList<Tuple<T, Function<? super Double, Double>>> init(double originalValue, List<Tuple<T, Function<? super Double, Double>>> originalFunctions) {
-        final ImmutableList.Builder<Tuple<T, Double>> modifierMapBuilder = ImmutableList.builder();
-        final ImmutableList.Builder<Tuple<T, Function<? super Double, Double>>> functionListBuilder = ImmutableList.builder();
-        final ImmutableMap.Builder<T, Double> mapBuilder = ImmutableMap.builder();
+    protected ImmutableList<T> init(double originalValue, List<T> originalFunctions) {
+        final ImmutableList.Builder<Tuple<M, Double>> modifierMapBuilder = ImmutableList.builder();
+        final ImmutableList.Builder<T> functionListBuilder = ImmutableList.builder();
+        final ImmutableMap.Builder<M, Double> mapBuilder = ImmutableMap.builder();
         double finalDamage = originalValue;
-        for (Tuple<T, Function<? super Double, Double>> tuple : originalFunctions) {
-            this.modifierFunctions.add(new Tuple<>(tuple.getFirst(), tuple.getSecond()));
+        for (T tuple : originalFunctions) {
+            this.modifierFunctions.add(convertTuple(tuple.getFirst(), tuple.getSecond()));
             double tempDamage = checkNotNull(tuple.getSecond().apply(finalDamage));
             finalDamage += tempDamage;
             modifierMapBuilder.add(new Tuple<>(tuple.getFirst(), tempDamage));
             mapBuilder.put(tuple.getFirst(), tempDamage);
             this.modifiers.put(tuple.getFirst(), tempDamage);
-            functionListBuilder.add(tuple);
+            functionListBuilder.add(convertTuple(tuple.getFirst(), tuple.getSecond()));
         }
         this.originalFinalAmount = finalDamage;
         this.originalModifiers = modifierMapBuilder.build();
@@ -72,10 +72,12 @@ public abstract class AbstractModifierEvent<T> extends AbstractEvent {
         return functionListBuilder.build();
     }
 
+    protected abstract T convertTuple(M obj, Function<? super Double, Double> function);
+
     protected void recalculateDamages(double baseAmount) {
         double tempAmount = baseAmount;
         this.modifiers.clear();
-        for (Tuple<T, Function<? super Double, Double>> entry : this.modifierFunctions) {
+        for (T entry : this.modifierFunctions) {
             double modifierAmount = checkNotNull(entry.getSecond().apply(tempAmount));
             if (this.modifiers.containsKey(entry.getFirst())) {
                 double oldAmount = this.modifiers.get(entry.getFirst());
@@ -94,16 +96,16 @@ public abstract class AbstractModifierEvent<T> extends AbstractEvent {
 
     protected double getFinalAmount(double baseAmount) {
         double damage = baseAmount;
-        for (Tuple<T, Function<? super Double, Double>> entry : this.modifierFunctions) {
+        for (T entry : this.modifierFunctions) {
             damage += checkNotNull(entry.getSecond().apply(damage));
         }
         return damage;
     }
 
-    public final List<Tuple<T, Function<? super Double, Double>>> getModifiers() {
-        ImmutableList.Builder<Tuple<T, Function<? super Double, Double>>> builder = ImmutableList.builder();
-        for (Tuple<T, Function<? super Double, Double>> entry : this.modifierFunctions) {
-            builder.add(new Tuple<>(entry.getFirst(), entry.getSecond()));
+    public List<T> getModifiers() {
+        ImmutableList.Builder<T> builder = ImmutableList.builder();
+        for (T entry : this.modifierFunctions) {
+            builder.add(entry);
         }
         return builder.build();
     }

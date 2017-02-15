@@ -32,6 +32,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.projectile.arrow.Arrow;
 import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.entity.damage.DamageFunction;
 import org.spongepowered.api.event.cause.entity.damage.DamageModifier;
 import org.spongepowered.api.event.cause.entity.damage.DamageModifier.Builder;
 import org.spongepowered.api.event.cause.entity.damage.DamageModifierType;
@@ -188,7 +189,7 @@ public interface DamageEntityEvent extends TargetEntityEvent, Cancellable {
      *
      * @return The list of damage modifier functions
      */
-    List<Tuple<DamageModifier, Function<? super Double, Double>>> getOriginalFunctions();
+    List<DamageFunction> getOriginalFunctions();
 
     /**
      * Gets the "base" damage to deal to the targeted {@link Entity}. The
@@ -290,7 +291,7 @@ public interface DamageEntityEvent extends TargetEntityEvent, Cancellable {
      * @return A list of damage modifiers to functions
      */
     @PropertySettings(requiredParameter = false, generateMethods = false)
-    List<Tuple<DamageModifier, Function<? super Double, Double>>> getModifiers();
+    List<DamageFunction> getModifiers();
 
     /**
      * Returns whether or not this event will cause the entity to die if the

@@ -88,8 +88,9 @@ import org.spongepowered.api.event.block.tileentity.ChangeSignEvent;
 import org.spongepowered.api.event.block.tileentity.SmeltEvent;
 import org.spongepowered.api.event.block.tileentity.TargetTileEntityEvent;
 import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.entity.damage.DamageFunction;
 import org.spongepowered.api.event.cause.entity.damage.DamageModifier;
-import org.spongepowered.api.event.cause.entity.health.HealthModifier;
+import org.spongepowered.api.event.cause.entity.health.HealthFunction;
 import org.spongepowered.api.event.command.SendCommandEvent;
 import org.spongepowered.api.event.command.TabCompleteEvent;
 import org.spongepowered.api.event.data.ChangeDataHolderEvent;
@@ -1471,7 +1472,7 @@ public class SpongeEventFactory {
      * @param originalDamage The original damage
      * @return A new damage entity event
      */
-    public static DamageEntityEvent createDamageEntityEvent(Cause cause, List<Tuple<DamageModifier, Function<? super Double, Double>>> originalFunctions, Entity targetEntity, double originalDamage) {
+    public static DamageEntityEvent createDamageEntityEvent(Cause cause, List<DamageFunction> originalFunctions, Entity targetEntity, double originalDamage) {
         HashMap<String, Object> values = new HashMap<>();
         values.put("cause", cause);
         values.put("originalFunctions", originalFunctions);
@@ -1621,7 +1622,7 @@ public class SpongeEventFactory {
      * @param originalHealAmount The original heal amount
      * @return A new heal entity event
      */
-    public static HealEntityEvent createHealEntityEvent(Cause cause, List<Tuple<HealthModifier, Function<? super Double, Double>>> originalFunctions, Entity targetEntity, double originalHealAmount) {
+    public static HealEntityEvent createHealEntityEvent(Cause cause, List<HealthFunction> originalFunctions, Entity targetEntity, double originalHealAmount) {
         HashMap<String, Object> values = new HashMap<>();
         values.put("cause", cause);
         values.put("originalFunctions", originalFunctions);

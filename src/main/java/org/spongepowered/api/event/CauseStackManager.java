@@ -66,8 +66,9 @@ public interface CauseStackManager {
      * all events through from api actions until it is popped off again.
      * 
      * @param obj The object to push to the stack
+     * @return The cause stack manager, for chaining
      */
-    void pushCause(Object obj);
+    CauseStackManager pushCause(Object obj);
 
     /**
      * Pops the most recently pushed cause object off of the stack and returns
@@ -126,9 +127,10 @@ public interface CauseStackManager {
      * 
      * @param key The context key
      * @param value The object
+     * @return The cause stack manager, for chaining
      * @see EventContextKeys
      */
-    void addContext(String key, Object value);
+    CauseStackManager addContext(String key, Object value);
 
     /**
      * Gets the context value with the given key.

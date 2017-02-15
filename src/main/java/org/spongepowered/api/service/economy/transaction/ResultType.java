@@ -24,7 +24,7 @@
  */
 package org.spongepowered.api.service.economy.transaction;
 
-import org.spongepowered.api.service.context.ServiceContext;
+import org.spongepowered.api.service.context.Context;
 
 /**
  * Represents the success or failure state of a {@link TransactionResult}.

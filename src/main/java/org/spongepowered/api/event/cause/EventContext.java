@@ -45,10 +45,21 @@ public final class EventContext {
 
     private static final EventContext EMPTY_CONTEXT = new EventContext(ImmutableMap.of());
 
+    /**
+     * Gets an empty context.
+     * 
+     * @return The empty context
+     */
     public static EventContext empty() {
         return EMPTY_CONTEXT;
     }
 
+    /**
+     * Creates a new {@link EventContext} from the given map of entries.
+     * 
+     * @param entries The context entries
+     * @return The new EventContext
+     */
     public static EventContext of(Map<String, Object> entries) {
         checkNotNull(entries, "Context entries cannot be null");
         for (Map.Entry<String, Object> entry : entries.entrySet()) {
@@ -57,6 +68,11 @@ public final class EventContext {
         return new EventContext(entries);
     }
 
+    /**
+     * Creates a new builder for creating an {@link EventContext}.
+     * 
+     * @return The new builder
+     */
     public static Builder builder() {
         return new Builder();
     }
@@ -67,16 +83,31 @@ public final class EventContext {
         this.entries = ImmutableMap.copyOf(values);
     }
 
-    public Optional<?> get(String name) {
-        checkNotNull(name, "Name cannot be null");
-        return Optional.ofNullable(this.entries.get(name));
+    /**
+     * Gets the value corresponding to the given key from the context.
+     * 
+     * @param key The key
+     * @return The context value, if found
+     */
+    public Optional<?> get(String key) {
+        checkNotNull(key, "Name cannot be null");
+        return Optional.ofNullable(this.entries.get(key));
     }
 
+    /**
+     * Gets the value corresponding to the given key from the context. If the
+     * value is not of the expected type then {@link Optional#empty()} is
+     * returned instead.
+     * 
+     * @param key The key
+     * @param expectedType The expected type
+     * @return The context value, if found and of the correct type
+     */
     @SuppressWarnings("unchecked")
-    public <T> Optional<T> get(String name, Class<T> expectedType) {
-        checkNotNull(name, "Name cannot be null");
+    public <T> Optional<T> get(String key, Class<T> expectedType) {
+        checkNotNull(key, "Name cannot be null");
         checkNotNull(expectedType, "Expected type cannot be null");
-        Object val = this.entries.get(name);
+        Object val = this.entries.get(key);
         if (val == null || !expectedType.isInstance(val)) {
             return Optional.empty();
         }
@@ -126,10 +157,17 @@ public final class EventContext {
 
         }
 
-        public Builder add(String name, Object context) {
-            checkNotNull(context, "Context object cannot be null");
-            checkArgument(!this.entries.containsKey(name), "Duplicate context value name");
-            this.entries.put(name, context);
+        /**
+         * Adds the given context key value pair to the context.
+         * 
+         * @param key The key
+         * @param value The value
+         * @return This builder, for chaining
+         */
+        public Builder add(String key, Object value) {
+            checkNotNull(value, "Context object cannot be null");
+            checkArgument(!this.entries.containsKey(key), "Duplicate context value name");
+            this.entries.put(key, value);
             return this;
         }
 
@@ -145,6 +183,11 @@ public final class EventContext {
             return this;
         }
 
+        /**
+         * Creates a new {@link EventContext}.
+         * 
+         * @return The EventContext
+         */
         public EventContext build() {
             return new EventContext(this.entries);
         }

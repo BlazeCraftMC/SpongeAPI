@@ -28,7 +28,7 @@ import java.util.Set;
 
 /**
  * A common interface for objects that have an identifier and are bound by
- * {@link ServiceContext}s.
+ * {@link Context}s.
  *
  */
 public interface Contextual {
@@ -49,5 +49,5 @@ public interface Contextual {
      *
      * @return An immutable set of active contexts
      */
-    Set<ServiceContext> getActiveContexts();
+    Set<Context> getActiveContexts();
 }

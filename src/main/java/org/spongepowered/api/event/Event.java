@@ -48,11 +48,21 @@ public interface Event {
     @AbsoluteSortPosition(0)
     Cause getCause();
 
+    /**
+     * Gets the source of the event (the first object in the cause).
+     * 
+     * @return The event source
+     */
     @PropertySettings(requiredParameter = false, generateMethods = false)
     default Object getSource() {
         return getCause().root();
     }
 
+    /**
+     * Gets the context of the event.
+     * 
+     * @return The event context
+     */
     @PropertySettings(requiredParameter = false, generateMethods = false)
     default EventContext getContext() {
         return getCause().getContext();

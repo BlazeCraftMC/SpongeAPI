@@ -35,7 +35,6 @@ import org.spongepowered.api.world.difficulty.Difficulty;
  * Represents a {@link Cause} for damage on the {@link Entity} being
  * healed. This will help inform what type of healing
  */
-@Deprecated // TODO Temporary as a marker to myself that I'd like to remove this
 public interface HealingSource {
 
     static Builder builder() {

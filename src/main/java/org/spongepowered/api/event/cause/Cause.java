@@ -30,9 +30,6 @@ import static com.google.common.base.Preconditions.checkState;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
-import org.spongepowered.api.block.BlockSnapshot;
-import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.util.ResettableBuilder;
 
 import java.util.ArrayList;
@@ -129,9 +126,7 @@ public final class Cause implements Iterable<Object> {
     }
 
     /**
-     * Gets the root {@link Object} of this cause. The root can be anything,
-     * including but not limited to: {@link Entity}s, {@link BlockSnapshot}s, or
-     * {@link PluginContainer}s etc.
+     * Gets the root {@link Object} of this cause.
      *
      * @return The root object cause for this cause
      */
@@ -210,32 +205,6 @@ public final class Cause implements Iterable<Object> {
             }
         }
         return Optional.empty();
-    }
-
-    public Optional<?> next(Object val) {
-        checkNotNull(val, "Previous value cannot be null");
-        for (int i = 0; i < this.cause.length; i++) {
-            if (this.cause[i].equals(val)) {
-                if (i + 1 == this.cause.length) {
-                    return Optional.empty();
-                }
-                return Optional.of(this.cause[i + 1]);
-            }
-        }
-        throw new IllegalArgumentException("Object " + val + " was not part of the cause");
-    }
-
-    public Optional<?> previous(Object val) {
-        checkNotNull(val, "Next value cannot be null");
-        for (int i = 0; i < this.cause.length; i++) {
-            if (this.cause[i].equals(val)) {
-                if (i == 0) {
-                    return Optional.empty();
-                }
-                return Optional.of(this.cause[i - 1]);
-            }
-        }
-        throw new IllegalArgumentException("Object " + val + " was not part of the cause");
     }
 
     /**
@@ -329,7 +298,7 @@ public final class Cause implements Iterable<Object> {
      * @return The new cause
      */
     public Cause with(Object additional) {
-        checkArgument(additional != null, "No null arguments allowed!");
+        checkNotNull(additional, "No null arguments allowed!");
         List<Object> list = new ArrayList<>();
         list.add(additional);
         return with(list);
@@ -344,11 +313,11 @@ public final class Cause implements Iterable<Object> {
      * @return The new cause
      */
     public Cause with(Object additional, Object... additionals) {
-        checkArgument(additional != null, "No null arguments allowed!");
+        checkNotNull(additional, "No null arguments allowed!");
         List<Object> list = new ArrayList<>();
         list.add(additional);
         for (Object object : additionals) {
-            checkArgument(object != null, "Cannot add null objects!");
+            checkNotNull(object, "Cannot add null objects!");
             list.add(object);
         }
         return with(list);
@@ -364,7 +333,7 @@ public final class Cause implements Iterable<Object> {
     public Cause with(Iterable<Object> iterable) {
         Cause.Builder builder = new Builder().from(this);
         for (Object o : iterable) {
-            checkArgument(o != null, "Cannot add null causes");
+            checkNotNull(o, "Cannot add null causes");
             builder.append(o);
         }
         return builder.build(this.context);
